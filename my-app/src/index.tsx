@@ -4,16 +4,12 @@ import './index.css';
 
 class Square extends React.Component {
   render() {
-    return (
-      <button className="square">
-        {/* TODO */}
-      </button>
-    );
+    return <button className="square">{/* TODO */}</button>;
   }
 }
 
 class Board extends React.Component {
-  renderSquare(i:number) {
+  renderSquare(i: number) {
     return <Square />;
   }
 
@@ -61,7 +57,4 @@ class Game extends React.Component {
 
 // ========================================
 
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
-);
+ReactDOM.render(<Game />, document.getElementById('root'));
