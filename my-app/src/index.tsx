@@ -8,20 +8,18 @@ interface SquarePropsInterface {
   number: number;
 }
 
-class Square extends React.Component<SquarePropsInterface, {}> {
-  render() {
-    return (
-      <button
-        className="square"
-        onClick={() => {
-          this.props.onClick();
-        }}
-      >
-        {this.props.value}
-        {/* {this.props.number} */}
-      </button>
-    );
-  }
+function Square(props: SquarePropsInterface) {
+  return (
+    <button
+      className="square"
+      onClick={() => {
+        props.onClick();
+      }}
+    >
+      {props.value}
+      {/* {this.props.number} */}
+    </button>
+  );
 }
 
 interface BoardStateInterface {
