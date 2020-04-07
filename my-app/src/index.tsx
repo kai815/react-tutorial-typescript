@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 interface SquarePropsInterface {
-  value: string | null;
+  value: string;
   onClick: () => void;
   number: number;
 }
@@ -23,7 +23,7 @@ function Square(props: SquarePropsInterface) {
 }
 
 interface BoardPropsInterface {
-  squares: (string | null)[];
+  squares: string[];
   onClick: (i: number) => void;
 }
 
@@ -62,7 +62,7 @@ class Board extends React.Component<BoardPropsInterface, {}> {
 }
 
 interface GameStateInterface {
-  history: { squares: (string | null)[] }[];
+  history: { squares: string[] }[];
   stepNumber: number;
   isATurn: boolean;
 }
@@ -73,7 +73,7 @@ class Game extends React.Component<{}, GameStateInterface> {
     this.state = {
       history: [
         {
-          squares: Array(9).fill(null),
+          squares: Array(9).fill(''),
         },
       ],
       stepNumber: 0,
@@ -148,7 +148,7 @@ class Game extends React.Component<{}, GameStateInterface> {
 
 ReactDOM.render(<Game />, document.getElementById('root'));
 
-function calculateWinner(squares: (string | null)[]) {
+function calculateWinner(squares: string[]) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
