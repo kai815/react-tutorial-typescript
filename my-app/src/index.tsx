@@ -22,50 +22,25 @@ function Square(props: SquarePropsInterface) {
   );
 }
 
-interface BoardStateInterface {
+interface BoardPropsInterface {
   squares: (string | null)[];
-  IsATurn: boolean;
+  onClick: (i: number) => void;
 }
 
-class Board extends React.Component<{}, BoardStateInterface> {
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      IsATurn: true,
-    };
-  }
+class Board extends React.Component<BoardPropsInterface, {}> {
   renderSquare(i: number) {
     return (
       <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
+        value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
         number={i}
       />
     );
   }
 
-  handleClick(i: number) {
-    const squares = this.state.squares.slice();
-    squares[i] = this.state.IsATurn ? 'A' : 'B';
-    this.setState({
-      squares: squares,
-      IsATurn: !this.state.IsATurn,
-    });
-  }
-
   render() {
-    const winner = calculateWinner(this.state.squares);
-    let status;
-    if (winner) {
-      status = 'Winner: ' + winner;
-    } else {
-      status = `Player ${this.state.IsATurn ? 'A' : 'B'}'s turn`;
-    }
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -86,15 +61,62 @@ class Board extends React.Component<{}, BoardStateInterface> {
   }
 }
 
-class Game extends React.Component {
+interface GameStateInterface {
+  history: { squares: (string | null)[] }[];
+  isATurn: boolean;
+}
+
+class Game extends React.Component<{}, GameStateInterface> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      history: [
+        {
+          squares: Array(9).fill(null),
+        },
+      ],
+      isATurn: true,
+    };
+  }
+
+  handleClick(i: number) {
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const squares = current.squares.slice();
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
+    squares[i] = this.state.isATurn ? 'A' : 'B';
+    this.setState({
+      history: history.concat([
+        {
+          squares: squares,
+        },
+      ]),
+      isATurn: !this.state.isATurn,
+    });
+  }
+
   render() {
+    const history = this.state.history;
+    const current = history[history.length - 1];
+    const winner = calculateWinner(current.squares);
+    let status;
+    if (winner) {
+      status = 'Winner: ' + winner;
+    } else {
+      status = `Player ${this.state.isATurn ? 'A' : 'B'}'s turn`;
+    }
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board
+            squares={current.squares}
+            onClick={(i) => this.handleClick(i)}
+          />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
+          <div>{status}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
