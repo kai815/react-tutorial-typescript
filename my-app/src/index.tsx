@@ -24,6 +24,7 @@ function Square(props: SquarePropsInterface) {
 
 interface BoardStateInterface {
   squares: (string | null)[];
+  IsATurn: boolean;
 }
 
 class Board extends React.Component<{}, BoardStateInterface> {
@@ -31,6 +32,7 @@ class Board extends React.Component<{}, BoardStateInterface> {
     super(props);
     this.state = {
       squares: Array(9).fill(null),
+      IsATurn: true,
     };
   }
   renderSquare(i: number) {
@@ -45,12 +47,15 @@ class Board extends React.Component<{}, BoardStateInterface> {
 
   handleClick(i: number) {
     const squares = this.state.squares.slice();
-    squares[i] = 'X';
-    this.setState({ squares: squares });
+    squares[i] = this.state.IsATurn ? 'A' : 'B';
+    this.setState({
+      squares: squares,
+      IsATurn: !this.state.IsATurn,
+    });
   }
 
   render() {
-    const status = 'Next player: X';
+    const status = `Player ${this.state.IsATurn ? 'A' : 'B'}'s turn`;
 
     return (
       <div>
